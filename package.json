@@ -1,8 +1,8 @@
 {
-  "name": "konstellation-runtimes",
+  "name": "playfround",
   "private": true,
   "workspaces": [
-    "api/*"
+    "api"
   ],
   "release": {
     "branches": [
