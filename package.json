@@ -2,7 +2,7 @@
   "name": "konstellation-runtimes",
   "private": true,
   "workspaces": [
-    "store/*"
+    "api/*"
   ],
   "release": {
     "branches": [
