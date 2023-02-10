@@ -49,7 +49,6 @@ jobs:
           images: "docker.io/${{ github.actor}}/${{ steps.tag-folder.outputs.COMPONENT }}"
           flavor: latest=auto
           tags: |
-            type=ref,event=tag
             type=semver,pattern={{version}},value=${{ steps.tag-folder.outputs.TAG }}
             type=sha,format=long
           labels: |
