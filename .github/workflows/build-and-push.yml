@@ -29,18 +29,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.repository }}-
-          restore-keys: ${{ runner.os }}-buildx--${{ github.repository }}
-
-      - name: Login to DockerHub Registry
+      - name: Login to ghcr.io
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Prepare Docker image metadata
         id: docker_image_metadata
@@ -54,18 +48,12 @@ jobs:
           labels: |
             org.opencontainers.image.version=${{ steps.tag-folder.outputs.TAG }}
 
-      # - name: Push to Docker Hub
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     platforms: linux/amd64
-      #     push: true
-      #     tags: |
-      #       ${{ github.actor }}/mairror-api:${{ github.ref_name }}
-      #       mairror/mairror-api:latest
-      #     cache-from: type=local,src=/tmp/.buildx-cache
-      #     cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-
-      - name: Move cache
-        run: |
-            rm -rf /tmp/.buildx-cache
-            mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          platforms: linux/amd64
+          tags: ${{ steps.docker_image_metadata.outputs.tags }}
+          labels: ${{ steps.docker_image_metadata.outputs.labels }}
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
