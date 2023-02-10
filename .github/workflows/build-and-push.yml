@@ -29,18 +29,26 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Login to ghcr.io
-        uses: docker/login-action@v2
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
+      # - name: Login to ghcr.io
+      #   uses: docker/login-action@v2
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
+
+            # "ghcr.io/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}"
       - name: Prepare Docker image metadata
         id: docker_image_metadata
         uses: docker/metadata-action@v4
         with:
-          images: "ghcr.io/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}"
+          images: |
+            ${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}
           flavor: latest=auto
           tags: |
             type=semver,pattern={{version}},value=${{ steps.tag-folder.outputs.TAG }}
@@ -54,9 +62,7 @@ jobs:
           context: ${{ steps.tag-folder.outputs.COMPONENT }}
           file: ${{ steps.tag-folder.outputs.COMPONENT }}/Dockerfile
           platforms: linux/amd64
-          tags: |
-            ghcr.io/${{ github.repository }}
-            ${{ steps.docker_image_metadata.outputs.tags }}
+          tags: ${{ steps.docker_image_metadata.outputs.tags }}
           labels: ${{ steps.docker_image_metadata.outputs.labels }}
           push: true
           cache-from: type=gha
