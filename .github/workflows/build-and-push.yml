@@ -85,7 +85,7 @@ jobs:
       - name: Sign the published Docker image
         env:
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-        run: cosign sign --key cosign.key ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
+        run: cosign sign --key cosign.key -a foo=bar ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
 
       # - name: Sign the published Docker image
       #   if: ${{ github.event_name != 'pull_request' }}
