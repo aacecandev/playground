@@ -54,7 +54,9 @@ jobs:
           context: ${{ steps.tag-folder.outputs.COMPONENT }}
           file: ${{ steps.tag-folder.outputs.COMPONENT }}/Dockerfile
           platforms: linux/amd64
-          tags: ${{ steps.docker_image_metadata.outputs.tags }}
+          tags: |
+            ghcr.io/${{ github.repository }}
+            ${{ steps.docker_image_metadata.outputs.tags }}
           labels: ${{ steps.docker_image_metadata.outputs.labels }}
           push: true
           cache-from: type=gha
