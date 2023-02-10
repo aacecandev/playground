@@ -29,12 +29,12 @@ RUN go build -ldflags '-extldflags "-static"' -o main main.go
 FROM alpine@sha256:93d5a28ff72d288d69b5997b8ba47396d2cbb62a72b5d87cd3351094b5d578a0
 
 # Set build arguments
+ARG UID=1001
 ARG PORT=8080
 
 # Set persistent environment variables
 ENV TZ=Europe/Madrid
 ENV USER=appuser
-ENV UID=1001
 
 # Create a non-root user
 RUN adduser --disabled-password --gecos "" --no-create-home --uid ${UID} ${USER} && \        
@@ -42,7 +42,8 @@ RUN adduser --disabled-password --gecos "" --no-create-home --uid ${UID} ${USER}
 
 # Install certificates that we'll add to the production env
 RUN apk --no-cache add \
-      ca-certificates tzdata
+      ca-certificates \
+      tzdata
 
 # Set the Current Working Directory inside the container
 WORKDIR /store
