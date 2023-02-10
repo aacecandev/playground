@@ -2,7 +2,7 @@ name: "Build and push API"
 on:
   push:
     tags:
-      - "api-v*.*.*"
+      - "api-*.*.*"
 
 jobs:
   build-release:
@@ -55,7 +55,7 @@ jobs:
             type=ref,event=pr
             type=semver,pattern=v{{version}}
             type=sha,format=long
-
+        # IMAGE_BASE_TAG=3.9
       # - name: Push to Docker Hub
       #   uses: docker/build-push-action@v2
       #   with:
