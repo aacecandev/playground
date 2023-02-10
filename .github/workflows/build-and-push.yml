@@ -4,6 +4,9 @@ on:
     tags:
       - "api-*.*.*"
 
+env:
+  REGISTRY: "docker.io"
+
 jobs:
   build-release:
     runs-on: ubuntu-latest
@@ -73,13 +76,24 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Sign the published Docker image
-        if: ${{ github.event_name != 'pull_request' }}
+      - name: Write signing key to disk
+        run: 'echo "$KEY" > cosign.key'
+        shell: bash
         env:
-          COSIGN_EXPERIMENTAL: "true"
-        # This step uses the identity token to provision an ephemeral certificate
-        # against the sigstore community Fulcio instance.
-        run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign {}@${{ steps.build-and-push.outputs.digest }}
+          KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+
+      - name: Sign the published Docker image
+        env:
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+        run: cosign sign --key cosign.key ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
+
+      # - name: Sign the published Docker image
+      #   if: ${{ github.event_name != 'pull_request' }}
+      #   env:
+      #     COSIGN_EXPERIMENTAL: "true"
+      #   # This step uses the identity token to provision an ephemeral certificate
+      #   # against the sigstore community Fulcio instance.
+      #   run: cosign sign ${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
 
       # - name: Sign image with Cosign
       #   env:
