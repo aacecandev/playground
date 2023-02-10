@@ -19,7 +19,7 @@ jobs:
         run: |
           REF_NAME=${{ github.ref_name }}
           COMPONENT=${REF_NAME%-*}
-          TAG=${REF_NAME##*-v}
+          TAG=${REF_NAME##*-}
           echo "COMPONENT=${COMPONENT}" >> ${GITHUB_OUTPUT}
           echo "TAG=${TAG}" >> ${GITHUB_OUTPUT}
 
