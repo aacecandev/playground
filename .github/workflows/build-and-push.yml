@@ -2,7 +2,7 @@ name: "Build and push API"
 on:
   push:
     tags:
-      - v*.*.*
+      - "api-v*.*.*"
 
 jobs:
   build-release:
