@@ -67,3 +67,16 @@ jobs:
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@main
+        with:
+          cosign-release: "v1.13.1"
+
+      - name: Sign image with Cosign
+        env:
+          TAGS: konstellation/kdl-py:${{ steps.tag-folder.outputs.image_base_tag }} konstellation/kdl-py:${{ steps.tag-folder.outputs.image_base_tag }}-${{ steps.tag-folder.outputs.image_tag }}
+          COSIGN_PRIVATE_KEY: ${{secrets.COSIGN_PRIVATE_KEY}}
+          COSIGN_PASSWORD: ${{secrets.COSIGN_PASSWORD}}
+        run: |
+          cosign sign --key env://COSIGN_PRIVATE_KEY ${{ steps.docker_image_metadata.outputs.tags }}
