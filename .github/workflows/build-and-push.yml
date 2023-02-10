@@ -58,10 +58,14 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          # platforms: linux/amd64
+          context: ${{ steps.tag-folder.outputs.COMPONENT }}
+          file: ${{ steps.tag-folder.outputs.COMPONENT }}/Dockerfile
+          platforms: linux/amd64
           tags: ${{ steps.docker_image_metadata.outputs.tags }}
           labels: ${{ steps.docker_image_metadata.outputs.labels }}
           push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           # cache-from: type=local,src=/tmp/.buildx-cache
           # cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
 
