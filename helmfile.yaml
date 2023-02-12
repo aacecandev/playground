@@ -1,0 +1,72 @@
+helmDefaults:
+  createNamespace: true
+  atomic: true
+  verify: false
+  wait: true
+  timeout: 1200
+  disableValidation: false
+
+templates:
+  default: &default
+    # This prevents helmfile exiting when it encounters a missing file
+    # Valid values are "Error", "Warn", "Info", "Debug". The default is "Error"
+    # Use "Debug" to make missing files errors invisible at the default log level(--log-level=INFO)
+    missingFileHandler: Warn
+    values:
+    - "helmfile/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl"
+    - "helmfile/{{`{{ .Release.Name }}`}}/values.yaml"
+    secrets:
+    - "helmfile/{{`{{ .Release.Name }}`}}/secrets.yaml"
+
+repositories:
+  - name: "stable"
+    url: https://charts.helm.sh/stable
+  - name: "rancher"
+    url: git+https://github.com/rancher/local-path-provisioner@deploy/chart?ref=v0.0.21
+  - name: "bedag"
+    url: https://bedag.github.io/helm-charts/
+  - name: jetstack
+    url: https://charts.jetstack.io
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts
+  - name: velero
+    url: https://vmware-tanzu.github.io/helm-charts
+  - name: github
+    url: https://actions-runner-controller.github.io/actions-runner-controller
+  - name: kyverno
+    url: https://kyverno.github.io/kyverno
+
+releases:
+  - name: "prometheus"
+    <<: *default
+    chart: "prometheus-community/kube-prometheus-stack"
+    namespace: monitoring
+    version: 45.0.0
+
+  # - name: velero
+  #   <<: *default
+  #   namespace: velero
+  #   chart: velero/velero
+  #   version: 2.31.9
+
+  # - name: gh-controller
+  #   needs:
+  #     - "cert-manager/cert-manager"
+  #   <<: *default
+  #   namespace: github
+  #   chart: github/actions-runner-controller
+  #   version: 0.21.0
+
+  # - name: gh-resources
+  #   chart: "bedag/raw"
+  #   version: 2.0.0
+  #   <<: *default
+  #   namespace: "github"
+  #   needs:
+  #     - "github/gh-controller"
+
+  - name: kyverno
+    <<: *default
+    chart: kyverno/kyverno
+    namespace: kyverno
+    version: 2.7.0
