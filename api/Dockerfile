@@ -21,7 +21,7 @@ RUN go mod download
 COPY . /store/
 
 # Build the Go app
-RUN go build -ldflags '-extldflags "-static"' -o main main.go 
+RUN go build -ldflags '-extldflags "-static"' -o main main.go
 
 # ------------------ PRODUCTION STAGE ------------------
 
@@ -37,12 +37,13 @@ ENV TZ=Europe/Madrid
 ENV USER=appuser
 
 # Create a non-root user
-RUN adduser --disabled-password --gecos "" --no-create-home --uid ${UID} ${USER} && \        
-      mkdir -p -mg=w /var/log/store                                                  
+RUN adduser --disabled-password --gecos "" --no-create-home --uid ${UID} ${USER} && \
+      mkdir -p -mg=w /var/log/store
 
 # Install certificates that we'll add to the production env
 RUN apk --no-cache add \
-      ca-certificates tzdata
+      ca-certificates \
+      tzdata
 
 # Set the Current Working Directory inside the container
 WORKDIR /store
@@ -57,4 +58,3 @@ USER ${USER}
 
 # Run the binary program produced by `go build`
 ENTRYPOINT ["/store/main"]
-
