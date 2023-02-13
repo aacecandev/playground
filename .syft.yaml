@@ -15,7 +15,7 @@ file: ""
 
 # enable/disable checking for application updates on startup
 # same as SYFT_CHECK_FOR_APP_UPDATE env var
-check-for-app-update: true
+check-for-app-update: false
 
 # a list of globs to exclude from scanning. same as --exclude ; for example:
 # exclude:
@@ -32,10 +32,10 @@ platform: "linux/amd64"
 catalogers:
   #   - ruby-gemfile
   #   - ruby-gemspec
-  #- python-index
-  #- python-package
-  #- javascript-lock
-  #- javascript-package
+  - python-index
+  - python-package
+  - javascript-lock
+  - javascript-package
   #   - php-composer-installed
   #   - php-composer-lock
   #   - alpmdb
