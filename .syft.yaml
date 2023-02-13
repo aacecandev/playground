@@ -186,3 +186,7 @@ log:
   # location to write the log file (default is not to have a log file)
   # same as SYFT_LOG_FILE env var
   file: ""
+
+dev:
+  profile-cpu: true
+  profile-mem: true
