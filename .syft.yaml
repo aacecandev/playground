@@ -4,14 +4,14 @@
 # output:
 #   - "json=<syft-json-output-file>"
 #   - "spdx-json=<spdx-json-output-file>"
-output: "spdx-json"
+output: "spdx-json=sbom.syft.spdx.json"
 
 # suppress all output (except for the SBOM report)
 # same as -q ; SYFT_QUIET env var
 quiet: false
 
 # same as --file; write output report to a file (default is to write to stdout)
-file: "sbom.syft.spdx.json"
+file: ""
 
 # enable/disable checking for application updates on startup
 # same as SYFT_CHECK_FOR_APP_UPDATE env var
@@ -187,6 +187,6 @@ log:
   # same as SYFT_LOG_FILE env var
   file: ""
 
-dev:
-  profile-cpu: true
-  profile-mem: true
+# dev:
+#   profile-cpu: true
+#   profile-mem: true
