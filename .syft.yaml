@@ -1,11 +1,11 @@
 # the output format(s) of the SBOM report (options: table, text, json, spdx, ...)
 # same as -o, --output, and SYFT_OUTPUT env var
 # to specify multiple output files in differing formats, use a list:
-# output:
+output:
 #   - "json=<syft-json-output-file>"
-#   - "spdx-json=<spdx-json-output-file>"
+  - "spdx-json=sbom.syft.spdx.json"
 # output: "spdx-json=sbom.syft.spdx.json"
-output: "json=sbom.syft.json"
+# output: "json=sbom.syft.json"
 
 
 # suppress all output (except for the SBOM report)
