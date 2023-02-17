@@ -3,7 +3,7 @@
 # to specify multiple output files in differing formats, use a list:
 output:
 #   - "json=<syft-json-output-file>"
-  - "spdx-json=sbom.syft.spdx.json"
+  # - "spdx-json=sbom.syft.spdx.json"
 # output: "spdx-json=sbom.syft.spdx.json"
 # output: "json=sbom.syft.json"
 
