@@ -109,14 +109,8 @@ jobs:
         uses: anchore/sbom-action@v0
         with:
           image: ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
-          output-file: sbom.syft.spdx.json
           artifact-name: sbom.syft.spdx.json
-
-      - name: Upload SBoM artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: sbom.syft.spdx.json
-          path: ./sbom.syft.spdx.json
+          output-file: ${{ GITHUB_ }}/sbom.syft.spdx.json
 
       # - name: Scan image with Grype
       #   uses: anchore/scan-action@v3
