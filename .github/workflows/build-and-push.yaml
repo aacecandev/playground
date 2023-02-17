@@ -110,6 +110,7 @@ jobs:
         with:
           image: ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
           output-file: sbom.syft.spdx.json
+          artifact-name: sbom.syft.spdx.json
 
       - name: Upload SBoM artifact
         uses: actions/upload-artifact@v2
