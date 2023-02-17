@@ -107,6 +107,8 @@ jobs:
 
       - name: SBoM create and publish
         uses: anchore/sbom-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           image: ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
           artifact-name: sbom.syft.spdx.json
