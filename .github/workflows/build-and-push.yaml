@@ -110,6 +110,8 @@ jobs:
         with:
           image: ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
           output-file: ./sbom.syft.spdx.json
+          upload-artifact: false
+          upload-release-assets: false
 
       # - name: Scan image with Grype
       #   uses: anchore/scan-action@v3
