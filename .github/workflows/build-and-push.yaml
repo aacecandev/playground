@@ -106,12 +106,14 @@ jobs:
       #     cosign sign --key env://COSIGN_PRIVATE_KEY ${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}:${{ steps.tag-folder.outputs.TAG }}
 
       - name: SBoM create and publish
-        uses: anchore/sbom-action@v0
+        uses: anchore/sbom-action@54e36e45f34bc64728f51adb8044404daca492a6 # v0.13.2
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           image: ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
-          artifact-name: sbom.syft.spdx.json
+          dependency-snapshot: true
+          format: spdx-json
+          artifact-name: sbom-syft-spdx-json
           output-file: ${{ github.workspace }}/sbom.syft.spdx.json
 
       # - name: Scan image with Grype
