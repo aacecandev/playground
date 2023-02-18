@@ -115,7 +115,7 @@ jobs:
           syft packages image: ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
 
       - name: Publish SBoM
-        uses: ansbom-artifact-matchchore/sbom-action/publish-sbom@54e36e45f34bc64728f51adb8044404daca492a6 # v0.13.2
+        uses: anchore/sbom-action/publish-sbom@54e36e45f34bc64728f51adb8044404daca492a6 # v0.13.2
         with:
           sbom-artifact-match: .*\\.spdx\\.json$
 
