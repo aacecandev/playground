@@ -117,7 +117,7 @@ jobs:
       - name: Publish SBoM
         uses: anchore/sbom-action/publish-sbom@54e36e45f34bc64728f51adb8044404daca492a6 # v0.13.2
         with:
-          sbom-artifact-match: .*\\.spdx\\.json$
+          sbom-artifact-match: ".*\.spdx\.json$"
 
       # - name: SBoM create and publish
       #   uses: anchore/sbom-action@54e36e45f34bc64728f51adb8044404daca492a6 # v0.13.2
