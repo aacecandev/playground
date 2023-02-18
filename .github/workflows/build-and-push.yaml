@@ -106,7 +106,7 @@ jobs:
       #     cosign sign --key env://COSIGN_PRIVATE_KEY ${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}:${{ steps.tag-folder.outputs.TAG }}
 
       - name: Download Syft
-        uses: anchore/sbom-action/download-syft
+        uses: anchore/sbom-action/download-syft@54e36e45f34bc64728f51adb8044404daca492a6 # v0.13.2
         with:
           syft-version: v0.72.0
 
