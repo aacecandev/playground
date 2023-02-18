@@ -105,14 +105,23 @@ jobs:
       #   run: |
       #     cosign sign --key env://COSIGN_PRIVATE_KEY ${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}:${{ steps.tag-folder.outputs.TAG }}
 
-      - name: SBoM create and publish
-        uses: anchore/sbom-action@54e36e45f34bc64728f51adb8044404daca492a6 # v0.13.2
+      - name: Download Syft
+        uses: anchore/sbom-action/download-syft
         with:
-          image: ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
-          dependency-snapshot: true
-          format: spdx-json
-          artifact-name: sbom-syft-spdx.json
-          output-file: sbom-syft-spdx.json
+          syft-version: v0.72.0
+
+      - name: Test
+        run: |
+          syft --help
+
+      # - name: SBoM create and publish
+      #   uses: anchore/sbom-action@54e36e45f34bc64728f51adb8044404daca492a6 # v0.13.2
+      #   with:
+      #     image: ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
+      #     dependency-snapshot: true
+      #     format: spdx-json
+      #     artifact-name: sbom-syft-spdx.json
+      #     output-file: sbom-syft-spdx.json
 
       # - name: Scan image with Grype
       #   uses: anchore/scan-action@v3
