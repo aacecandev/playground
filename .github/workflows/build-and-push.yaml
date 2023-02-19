@@ -89,6 +89,7 @@ jobs:
         run:
           cosign sign --key cosign.key -a foo=bar ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
 
+### This goes commented
       # - name: Sign the published Docker image
       #   if: ${{ github.event_name != 'pull_request' }}
       #   env:
@@ -105,35 +106,38 @@ jobs:
       #   run: |
       #     cosign sign --key env://COSIGN_PRIVATE_KEY ${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}:${{ steps.tag-folder.outputs.TAG }}
 
-      - name: Download Syft
-        uses: anchore/sbom-action/download-syft@54e36e45f34bc64728f51adb8044404daca492a6 # v0.13.2
-        with:
-          syft-version: v0.72.0
+### This goes uncommented
+      # - name: Download Syft
+      #   uses: anchore/sbom-action/download-syft@54e36e45f34bc64728f51adb8044404daca492a6 # v0.13.2
+      #   with:
+      #     syft-version: v0.72.0
 
-      - name: Test
-        run: |
-          syft packages ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
-          ls -la
+      # - name: Test
+      #   run: |
+      #     syft packages ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
+      #     ls -la
 
-      - name: Scan image with Grype
-        id: scan
-        uses: anchore/scan-action@v3
-        with:
-          sbom: ./sbom.syft.spdx.json
+      # - name: Scan image with Grype
+      #   id: scan
+      #   uses: anchore/scan-action@v3
+      #   with:
+      #     sbom: ./sbom.syft.spdx.json
 
-      - name: upload Anchore scan SARIF report
-        uses: github/codeql-action/upload-sarif@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-        with:
-          sarif_file: ${{ steps.scan.outputs.sarif }}
+      # - name: upload Anchore scan SARIF report
+      #   uses: github/codeql-action/upload-sarif@v2
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.PAT }}
+      #   with:
+      #     sarif_file: ${{ steps.scan.outputs.sarif }}
 
-      - name: Publish SBoM
-        uses: anchore/sbom-action/publish-sbom@v0
-        with:
-          sbom-artifact-match: "^sbom.syft.spdx.json$"
+      # - name: Publish SBoM
+      #   uses: anchore/sbom-action/publish-sbom@v0
+      #   with:
+      #     sbom-artifact-match: "^sbom.syft.spdx.json$"
 
-      # - name: SBoM create and publish
+
+### This is the old workflow, it is not working anymore
+      # - name: SBoM16 alerts create and publish
       #   uses: anchore/sbom-action@54e36e45f34bc64728f51adb8044404daca492a6 # v0.13.2
       #   with:
       #     image: ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}

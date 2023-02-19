@@ -163,13 +163,34 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
+
 ### CUSTOM ###
 
 # Cosign and SBoM
 cosign.key
 sbom.syft.spdx.json
+vuln-report.json
 
 # envrc
 .envrc
 
 # Go binaries
+main
