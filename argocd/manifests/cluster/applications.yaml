@@ -35,8 +35,8 @@ spec:
     #       value: "false"
     #     - name: image.name
     #       value: quay.io/redhatworkshops/gitops-helm-quarkus
-    chart: bitnami/redis-cluster
-    repoURL: https://github.com/bitnami/charts.git
+    chart: redis-cluster
+    repoURL: https://charts.bitnami.com/bitnami
     targetRevision: 8.3.7
   syncPolicy:
     retry:
