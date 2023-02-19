@@ -1,0 +1,53 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis
+  namespace: argocd
+spec:
+  destination:
+    namespace: kafka
+    server: https://kubernetes.default.svc
+  project: kafka
+  source:
+    path: argocd/manifests/redis
+    repoURL: https://github.com/aacecandev/playground.git
+    targetRevision: HEAD
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+---
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-cluster
+  namespace: argocd
+spec:
+  destination:
+    namespace: redis
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    # helm:
+    #   parameters:
+    #     - name: build.enabled
+    #       value: "false"
+    #     - name: deploy.route.enabled
+    #       value: "false"
+    #     - name: image.name
+    #       value: quay.io/redhatworkshops/gitops-helm-quarkus
+    chart: redis-cluster
+    repoURL: https://github.com/bitnami/charts/bitnami
+    targetRevision: 8.3.7
+  syncPolicy:
+    retry:
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m0s
+      limit: 5
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

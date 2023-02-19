@@ -51,6 +51,7 @@ jobs:
       #     password: ${{ secrets.GITHUB_TOKEN }}
 
             # "ghcr.io/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}"
+
       - name: Prepare Docker image metadata
         id: meta
         uses: docker/metadata-action@v4
@@ -139,7 +140,6 @@ jobs:
           overwrite: true
           # body: "This is my release text"
 
-
 ### This is the old workflow, it is not working anymore
       # - name: Publish SBoM
       #   uses: anchore/sbom-action/publish-sbom@v0
@@ -173,3 +173,80 @@ jobs:
       #   env:
       #     COSIGN_PRIVATE_KEY: ${{secrets.COSIGN_PRIVATE_KEY}}
       #     COSIGN_PASSWORD: ${{secrets.COSIGN_PASSWORD}}
+
+# This steps has not been totally tested
+  # create-sbom-and-scan:
+  #   runs-on: ubuntu-22.04
+  #   needs: build-and-push-image
+  #   steps:
+  #     - name: SBoM create and publish
+  #       uses: anchore/sbom-action@v0
+  #       with:
+  #         image: konstellation/kdl-py:${{ needs.build-and-push-image.outputs.image_base_tag }}-${{ needs.build-and-push-image.outputs.image_tag }}
+  #         output-file: ./sbom.syft.spdx.json
+
+  #     - name: Upload SBoM artifact
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: sbom.syft.spdx.json
+  #         path: ./sbom.syft.spdx.json
+
+  #     - name: Scan image with Grype
+  #       uses: anchore/scan-action@v3
+  #       with:
+  #         sbom: ./sbom.syft.spdx.json
+
+  #     - name: Upload vulnerability report artifact
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: vulnerability-report.grype.json
+  #         path: ./vulnerability-report.grype.json
+
+  # attestation:
+  #   runs-on: ubuntu-22.04
+  #   needs: [create-sbom-and-scan, build-and-push-image]
+  #   steps:
+  #     - name: Download SBoM artifact
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: sbom.syft.spdx.json
+  #         path: ./sbom.syft.spdx.json
+
+  #     - name: Download vulnerability report artifact
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: vulnerability-report.grype.json
+  #         path: ./vulnerability-report.grype.json
+
+  #     - name: Install Cosign
+  #       uses: sigstore/cosign-installer@main
+  #       # with:
+  #       #   cosign-release: "v2.8.1" # We don't know if this represents the cosign version or the cosign-installer version
+
+  #     - name: Login to DockerHub Registry
+  #       uses: docker/login-action@v2
+  #       with:
+  #         username: ${{ secrets.docker_username }}
+  #         password: ${{ secrets.docker_token }}
+
+  #     - name: Create SBoM attestation
+  #       run: |
+  #         cosign attest --yes --predicate ./sbom.syft.spdx.json --key env://COSIGN_PRIVATE_KEY konstellation/kdl-py:${{ needs.build-and-push-image.outputs.image_base_tag }}
+  #         cosign attest --yes --predicate ./sbom.syft.spdx.json --key env://COSIGN_PRIVATE_KEY konstellation/kdl-py:${{ needs.build-and-push-image.outputs.image_base_tag }}-${{ needs.build-and-push-image.outputs.image_tag }}
+  #       env:
+  #         COSIGN_PRIVATE_KEY: ${{secrets.COSIGN_PRIVATE_KEY}}
+  #         COSIGN_PASSWORD: ${{secrets.COSIGN_PASSWORD}}
+
+  #     - name: Upload attestation artifact
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: cosign-attestation.json
+  #         path: ./cosign-attestation.json
+
+  #     - name: Create vulnerability report attestation
+  #       run: |
+  #         cosign attest --yes --predicate ./vulnerability-report.grype.json --key env://COSIGN_PRIVATE_KEY konstellation/kdl-py:${{ needs.build-and-push-image.outputs.image_base_tag }}
+  #         cosign attest --yes --predicate ./vulnerability-report.grype.json --key env://COSIGN_PRIVATE_KEY konstellation/kdl-py:${{ needs.build-and-push-image.outputs.image_base_tag }}${{ needs.build-and-push-image.outputs.image_tag }}
+  #       env:
+  #         COSIGN_PRIVATE_KEY: ${{secrets.COSIGN_PRIVATE_KEY}}
+  #         COSIGN_PASSWORD: ${{secrets.COSIGN_PASSWORD}}
