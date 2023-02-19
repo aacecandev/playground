@@ -18,7 +18,7 @@ spec:
     #       value: "false"
     #     - name: image.name
     #       value: quay.io/redhatworkshops/gitops-helm-quarkus
-    chart: prometheus-community/kube-prometheus-stack
+    chart: kube-prometheus-stack
     repoURL: https://prometheus-community.github.io/helm-charts
     targetRevision: 45.1.1
   syncPolicy:
