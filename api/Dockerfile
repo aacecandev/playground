@@ -53,7 +53,7 @@ COPY --from=builder --chown=${USER}:0 /store /store/
 # tells Docker that the container listens on specified network ports at runtime
 EXPOSE ${PORT}
 
-USER ${USER}
+# USER ${USER}
 
 # Run the binary program produced by `go build`
 ENTRYPOINT ["/store/main"]
