@@ -232,3 +232,6 @@ vuln-report.json
 
 # Go binaries
 main
+
+# Kind
+store-config
