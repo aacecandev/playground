@@ -76,18 +76,18 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Write signing key to disk
-        run: 'echo "$KEY" > cosign.key'
-        shell: bash
-        env:
-          KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+      # - name: Write signing key to disk
+      #   run: 'echo "$KEY" > cosign.key'
+      #   shell: bash
+      #   env:
+      #     KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
 
-      - name: Sign the published Docker image
-        env:
-          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-          # cosign sign --key cosign.key -a foo=bar ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}:${{ steps.tag-folder.outputs.TAG }}
-        run:
-          cosign sign --key cosign.key -a foo=bar ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
+      # - name: Sign the published Docker image
+      #   env:
+      #     COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+      #     # cosign sign --key cosign.key -a foo=bar ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}:${{ steps.tag-folder.outputs.TAG }}
+      #   run:
+      #     cosign sign --key cosign.key -a foo=bar ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
 
 ### This goes commented
       # - name: Sign the published Docker image
@@ -98,13 +98,12 @@ jobs:
       #   # against the sigstore community Fulcio instance.
       #   run: cosign sign ${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
 
-      # - name: Sign image with Cosign
-      #   env:
-      #     TAGS: konstellation/kdl-py:${{ steps.tag-folder.outputs.image_base_tag }} konstellation/kdl-py:${{ steps.tag-folder.outputs.image_base_tag }}-${{ steps.tag-folder.outputs.image_tag }}
-      #     COSIGN_PRIVATE_KEY: ${{secrets.COSIGN_PRIVATE_KEY}}
-      #     COSIGN_PASSWORD: ${{secrets.COSIGN_PASSWORD}}
-      #   run: |
-      #     cosign sign --key env://COSIGN_PRIVATE_KEY ${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}:${{ steps.tag-folder.outputs.TAG }}
+      - name: Sign image with Cosign
+        env:
+          COSIGN_PRIVATE_KEY: ${{secrets.COSIGN_PRIVATE_KEY}}
+          COSIGN_PASSWORD: ${{secrets.COSIGN_PASSWORD}}
+        run: |
+          cosign sign --key env://COSIGN_PRIVATE_KEY${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
 
 ### This goes uncommented
       - name: Download Syft

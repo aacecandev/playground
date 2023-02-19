@@ -42,7 +42,7 @@ RUN adduser --disabled-password --gecos "" --no-create-home --uid ${UID} ${USER}
 
 # Install certificates that we'll add to the production env
 RUN apk --no-cache add \
-      ca-certificates tzdata
+      ca-certificates \tzdata
 
 # Set the Current Working Directory inside the container
 WORKDIR /store
