@@ -15,4 +15,8 @@ jobs:
       - name: Anchore SBOM Action
         uses: anchore/sbom-action@v0.13.3
         with:
-          format: cyclonedx-json
+          path: "."
+          format: spdx-json
+          artifact-name: sbom.syft.spdx.json
+          output-file: sbom.syft.spdx.json
+          dependency-snapshot: true
