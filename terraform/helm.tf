@@ -7,7 +7,7 @@ resource "helm_release" "argocd" {
   create_namespace = true
 
   values = [
-    file("../argocd/application.yaml")
+    file("../argocd/root.yaml")
   ]
 }
 

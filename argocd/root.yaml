@@ -2,11 +2,11 @@ server:
   additionalApplications:
     - name: store
       namespace: argocd
-      project: default
+      project: store
       source:
         repoURL: https://github.com/aacecandev/playground.git
         targetRevision: HEAD
-        path: argocd/manifests/cluster
+        path: argocd/apps
         directory:
           recurse: true
       destination:
