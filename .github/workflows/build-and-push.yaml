@@ -103,7 +103,7 @@ jobs:
           COSIGN_PRIVATE_KEY: ${{secrets.COSIGN_PRIVATE_KEY}}
           COSIGN_PASSWORD: ${{secrets.COSIGN_PASSWORD}}
         run: |
-          cosign sign --key env://COSIGN_PRIVATE_KEY${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
+          cosign sign --key env://COSIGN_PRIVATE_KEY ${{ env.REGISTRY }}/${{ github.repository }}-${{ steps.tag-folder.outputs.COMPONENT }}@${{ steps.build-and-push.outputs.digest }}
 
 ### This goes uncommented
       - name: Download Syft
