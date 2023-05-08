@@ -108,7 +108,7 @@ jobs:
 
 ### This goes uncommented
       - name: Download Syft
-        uses: anchore/sbom-action/download-syft@54e36e45f34bc64728f51adb8044404daca492a6 # v0.13.2
+        uses: anchore/sbom-action/download-syft@4d571ad1038a9cc29d676154ef265ab8f9027042 # v0.14.2
         with:
           syft-version: v0.72.0
 
